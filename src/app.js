@@ -3,6 +3,7 @@ import { usersList } from '../constants/userMock.js';
 import { tweetList } from '../constants/tweetMock.js';
 
 const TWEETS_TO_SHOW = 10;
+const TWEETS_PER_PAGE = 10;
 
 const app = express();
 
@@ -17,7 +18,18 @@ const parseLastTweets = function (numberTweets = Infinity) {
   return tweetsPosts;
 };
 
-const filterUserTweet = function (username, numberTweets = Infinity) {
+const parsePageTweets = function (page) {
+  if (page > 0){
+    const firsTweetIndex = TWEETS_PER_PAGE * (page - 1);
+    const lastTweetIndex = firsTweetIndex + TWEETS_PER_PAGE;
+    const pageTweets = tweetList.slice(firsTweetIndex, lastTweetIndex);
+    const tweetsPagePosts = pageTweets.map(tweet =>parseTweet(tweet));
+    return tweetsPagePosts;
+  }
+  return [];
+};
+
+const filterUserTweets = function (username, numberTweets = Infinity) {
   const userTweets = tweetList.filter(tweet => tweet.username === username);
   const lastUserTweets = userTweets.length > numberTweets ? userTweets.slice(0,numberTweets): [...userTweets];
   const userTweetsPost = lastUserTweets.map(tweet =>parseTweet(tweet));
@@ -25,13 +37,17 @@ const filterUserTweet = function (username, numberTweets = Infinity) {
 };
 
 app.get('/tweets',(req,res)=>{
-  console.log(parseLastTweets(TWEETS_TO_SHOW));
-  res.send(parseLastTweets(TWEETS_TO_SHOW));
+  if (req.query.page) {
+    const page = parseInt(req.query.page);
+    res.send(parsePageTweets(page));
+  } else {
+    res.send(parseLastTweets(TWEETS_TO_SHOW));    
+  }
 });
 
 app.get('/tweets/:username',(req,res)=>{
   const username = req.params.username;
-  res.send(filterUserTweet(username, TWEETS_TO_SHOW));
+  res.send(filterUserTweets(username, TWEETS_TO_SHOW));
 });
 
 app.listen(5000, () => console.log('Server running at port 5000...'));
