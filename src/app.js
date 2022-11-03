@@ -17,6 +17,9 @@ const parseLastTweets = function (numberTweets = TWEETS_TO_SHOW) {
   return tweetsPosts;
 };
 
-console.log(parseLastTweets());
+app.get('/tweets',(req,res)=>{
+  console.log(parseLastTweets());
+  res.send(parseLastTweets());
+});
 
-app.listen(5000, ()=>console.log('Server running at port 5000...'));
+app.listen(5000, () => console.log('Server running at port 5000...'));
