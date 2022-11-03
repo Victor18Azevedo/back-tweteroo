@@ -19,14 +19,11 @@ const parseLastTweets = function (numberTweets = Infinity) {
 };
 
 const parsePageTweets = function (page) {
-  if (page > 0){
-    const firsTweetIndex = TWEETS_PER_PAGE * (page - 1);
-    const lastTweetIndex = firsTweetIndex + TWEETS_PER_PAGE;
-    const pageTweets = tweetList.slice(firsTweetIndex, lastTweetIndex);
-    const tweetsPagePosts = pageTweets.map(tweet =>parseTweet(tweet));
-    return tweetsPagePosts;
-  }
-  return [];
+  const firsTweetIndex = TWEETS_PER_PAGE * (page - 1);
+  const lastTweetIndex = firsTweetIndex + TWEETS_PER_PAGE;
+  const pageTweets = tweetList.slice(firsTweetIndex, lastTweetIndex);
+  const tweetsPagePosts = pageTweets.map(tweet =>parseTweet(tweet));
+  return tweetsPagePosts;
 };
 
 const filterUserTweets = function (username, numberTweets = Infinity) {
@@ -39,7 +36,7 @@ const filterUserTweets = function (username, numberTweets = Infinity) {
 app.get('/tweets',(req,res)=>{
   if (req.query.page) {
     const page = parseInt(req.query.page);
-    res.send(parsePageTweets(page));
+    page > 0 ? res.send(parsePageTweets(page)) : res.status(400).send('Informe uma página válida!');
   } else {
     res.send(parseLastTweets(TWEETS_TO_SHOW));    
   }
