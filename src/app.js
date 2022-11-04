@@ -12,7 +12,10 @@ app.use(express.json());
 
 const parseTweet = function (tweet) {
   const tweetUser = usersList.find((u) => u.username === tweet.username);
-  return { ...tweet, avatar: tweetUser.avatar };
+  if (tweetUser) {
+    return { ...tweet, avatar: tweetUser.avatar };
+  }
+  return {};
 };
 
 const parseLastTweets = function (numberTweets = Infinity) {
@@ -54,7 +57,8 @@ app.post('/sign-up', (req, res) => {
 });
 
 app.post('/tweets', (req, res) => {
-  const { username, tweet } = req.body;
+  const username = req.headers.user;
+  const { tweet } = req.body;
   if (!username || !tweet) {
     res.status(400).send('Todos os campos são obrigatórios!');
     return;
@@ -84,7 +88,7 @@ app.get('/tweets/:username', (req, res) => {
     return;
   }
 
-  const userTweets = filterUserTweets(username, TWEETS_TO_SHOW);
+  const userTweets = filterUserTweets(username);
   if (userTweets.length === 0) {
     res.status(400).send('Usuário sem tweets');
     return;
