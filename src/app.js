@@ -45,7 +45,7 @@ const filterUserTweets = function (username, numberTweets = Infinity) {
 app.post('/sing-up', (req, res) => {
   const { username, avatar } = req.body;
   if (!username || !avatar) {
-    res.status(400).res.send('Todos os campos são obrigatórios!');
+    res.status(400).send('Todos os campos são obrigatórios!');
     return;
   }
 
@@ -56,7 +56,7 @@ app.post('/sing-up', (req, res) => {
 app.post('/tweets', (req, res) => {
   const { username, tweet } = req.body;
   if (!username || !tweet) {
-    res.status(400).res.send('Todos os campos são obrigatórios!');
+    res.status(400).send('Todos os campos são obrigatórios!');
     return;
   }
 
@@ -65,6 +65,7 @@ app.post('/tweets', (req, res) => {
 });
 
 app.get('/tweets', (req, res) => {
+  console.log(req.query);
   if (req.query.page) {
     const page = parseInt(req.query.page);
     page > 0
