@@ -42,7 +42,7 @@ const filterUserTweets = function (username, numberTweets = Infinity) {
   return userTweetsPost;
 };
 
-app.post('/sing-up', (req, res) => {
+app.post('/sign-up', (req, res) => {
   const { username, avatar } = req.body;
   if (!username || !avatar) {
     res.status(400).send('Todos os campos são obrigatórios!');
