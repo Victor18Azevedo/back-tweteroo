@@ -48,6 +48,12 @@ app.post('/sing-up', (req, res) => {
   res.status(200).send('Ok');
 });
 
+app.post('/tweets', (req, res) => {
+  const { username, tweet } = req.body;
+  tweetList.unshift({ username, tweet });
+  res.status(200).send('Ok');
+});
+
 app.get('/tweets', (req, res) => {
   if (req.query.page) {
     const page = parseInt(req.query.page);
