@@ -78,7 +78,19 @@ app.get('/tweets', (req, res) => {
 
 app.get('/tweets/:username', (req, res) => {
   const username = req.params.username;
-  res.send(filterUserTweets(username, TWEETS_TO_SHOW));
+
+  if (usersList.filter((u) => u.username === username).length === 0) {
+    res.status(400).send('Usuário inexistente');
+    return;
+  }
+
+  const userTweets = filterUserTweets(username, TWEETS_TO_SHOW);
+  if (userTweets.length === 0) {
+    res.status(400).send('Usuário sem tweets');
+    return;
+  }
+
+  res.send(userTweets);
 });
 
 app.listen(5000, () => console.log('Server running in port 5000...'));
