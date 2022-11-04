@@ -65,15 +65,15 @@ app.post('/tweets', (req, res) => {
 });
 
 app.get('/tweets', (req, res) => {
-  console.log(req.query);
-  if (req.query.page) {
-    const page = parseInt(req.query.page);
+  const { page } = req.query;
+  if (page) {
     page > 0
       ? res.send(parsePageTweets(page))
       : res.status(400).send('Informe uma página válida!');
-  } else {
-    res.send(parseLastTweets(TWEETS_TO_SHOW));
+    return;
   }
+
+  res.send(parseLastTweets(TWEETS_TO_SHOW));
 });
 
 app.get('/tweets/:username', (req, res) => {
