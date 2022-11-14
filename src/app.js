@@ -1,7 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { usersList } from "../constants/userMock.js";
-import { tweetList } from "../constants/tweetMock.js";
 
 const TWEETS_TO_SHOW = 10;
 const TWEETS_PER_PAGE = 10;
